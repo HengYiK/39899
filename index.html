@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3989 · 资源带走</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Microsoft YaHei', sans-serif;
+      min-height: 100vh;
+    }
+    
+    /* 导航栏 */
+    .navbar {
+      background: #111;
+      padding: 15px 30px;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+    
+    .navbar a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .navbar a:hover { color: #fff; }
+    
+    .navbar .warning {
+      color: #ff3333;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    /* 主页区域 */
+    .home-page {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    
+    .home-page img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .home-text {
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .home-text h1 {
+      font-size: 60px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 20px #000;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    
+    .home-text p {
+      font-size: 24px;
+      color: #ddd;
+      text-shadow: 0 0 10px #000;
+    }
+    
+    /* 资源站 */
+    .resource-page {
+      display: none;
+      padding: 30px;
+    }
+    
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+    }
+    
+    .resource-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .resource-card:hover {
+      transform: translateY(-5px);
+      border-color: #666;
+    }
+    
+    .resource-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #222;
+    }
+    
+    .resource-card .title {
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    /* 弹窗 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal .close {
+      position: absolute;
+      top: 10px; right: 20px;
+      font-size: 30px;
+      cursor: pointer;
+      color: #aaa;
+    }
+    
+    .modal h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+    
+    .modal img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      margin: 10px 0;
+      background: #000;
+    }
+    
+    .modal .content {
+      margin: 20px 0;
+      line-height: 1.8;
+      color: #ccc;
+    }
+    
+    .modal .download-btn {
+      display: inline-block;
+      background: #2d7d2d;
+      color: #fff;
+      padding: 12px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    
+    .modal .download-btn:hover {
+      background: #3a9a3a;
+    }
+    
+    @media (max-width: 768px) {
+      .resource-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <div class="navbar">
+    <a onclick="showHome()">🏠 主页</a>
+    <a onclick="showResources()">📁 资源站</a>
+    <a class="warning" onclick="alert('下载必看：请遵守法律法规，资源仅供学习交流！')">⚠️ 下载必看！</a>
+  </div>
+
+  <!-- 主页 -->
+  <div id="homePage" class="home-page">
+    <img src="/mainpage.png" alt="主页图片" onerror="this.style.display='none'">
+    <div class="home-text">
+      <h1 onclick="showResources()">3989，资源带走</h1>
+      <p>一个为大众服务的网站</p>
+    </div>
+  </div>
+
+  <!-- 资源站 -->
+  <div id="resourcePage" class="resource-page">
+    <div id="resourceGrid" class="resource-grid"></div>
+  </div>
+
+  <!-- 详情弹窗 -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    let resources = [];
+
+    // 加载资源
+    async function loadResources() {
+      try {
+        const res = await fetch('/api/resources');
+        resources = await res.json();
+        renderResources();
+      } catch (e) {
+        console.error('加载资源失败:', e);
+        document.getElementById('resourceGrid').innerHTML = '<p style="color:#888;padding:50px;">加载失败，请检查服务器</p>';
+      }
+    }
+
+    // 渲染资源卡片
+    function renderResources() {
+      const grid = document.getElementById('resourceGrid');
+      
+      if (resources.length === 0) {
+        grid.innerHTML = '<p style="color:#888;padding:50px;">暂无资源，请在 data 文件夹中添加</p>';
+        return;
+      }
+
+      grid.innerHTML = resources.map((r, i) => `
+        <div class="resource-card" onclick="openDetail(${i})">
+          <img src="${r.img1 ? '/data/' + r.img1 : ''}" 
+               alt="${r.title}"
+               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23333%22 width=%22300%22 height=%22200%22/><text fill=%22%23888%22 x=%2220%22 y=%22110%22 font-size=%2220%22>暂无图片</text></svg>'">
+          <div class="title">${r.title}</div>
+        </div>
+      `).join('');
+    }
+
+    // 打开详情
+    function openDetail(index) {
+      const r = resources[index];
+      const body = document.getElementById('modalBody');
+      
+      let imgs = '';
+      if (r.img1) imgs += `<img src="/data/${r.img1}" onerror="this.style.display='none'">`;
+      if (r.img2) imgs += `<img src="/data/${r.img2}" onerror="this.style.display='none'">`;
+      
+      body.innerHTML = `
+        <h2>${r.title}</h2>
+        ${imgs}
+        <div class="content">${r.content || '暂无介绍'}</div>
+        ${r.download ? `<a href="${r.download}" target="_blank" class="download-btn">📥 下载资源</a>` : ''}
+      `;
+      
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function showHome() {
+      document.getElementById('homePage').style.display = 'flex';
+      document.getElementById('resourcePage').style.display = 'none';
+    }
+
+    function showResources() {
+      document.getElementById('homePage').style.display = 'none';
+      document.getElementById('resourcePage').style.display = 'block';
+      if (resources.length === 0) loadResources();
+    }
+
+    // 点击弹窗外部关闭
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // 初始加载
+    loadResources();
+  </script>
+</body>
+</html>
