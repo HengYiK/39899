@@ -1,0 +1,5 @@
+<Title>罗兰之歌。<Title>
+<img1>rolan.png<img1>
+<img2>rolan1.png<img2>
+<cont>罗兰的传奇在吟游诗人口中吟唱了一百多年。在十一世纪出现了最初的抄本。现存主要的有法兰西、英格兰、意大利、尼德兰、日耳曼、威尔士、斯堪的纳维亚等文字写成的八种版本。历代评论家一致认为牛津收藏的一种抄本，其价格超过其他各版的总和。<cont>
+<download> https://pan.quark.cn/s/bf7c1d4c3db4#/list/share <download>
