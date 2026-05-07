@@ -1,0 +1,8 @@
+<Title> Lemon <Title>
+<img1> lemon.jpg <img1>
+<img2> lemon1.jpg <img2>
+<cont> 我要上清北！（小声）（划掉，孩子知道错了）
+大笨蛋柠檬！
+看到了就快说一声！
+你白枫哥哥
+强？强！<cont>
